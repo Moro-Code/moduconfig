@@ -6,7 +6,7 @@ chardet==3.0.4
 docutils==0.16
 idna==2.8
 importlib-metadata==1.4.0
--e git+https://github.com/Moro-Code/moduconfig.git@b9df8ba10d1cdebfd18b06d9ce165e5eb22e16f9#egg=moduconfig
+-e git+https://github.com/Moro-Code/moduconfig.git@decc7db5165fca2e6d5513e226a8c3545311ada1#egg=moduconfig
 more-itertools==8.1.0
 mypy==0.761
 mypy-extensions==0.4.3
@@ -23,7 +23,6 @@ requests==2.22.0
 requests-toolbelt==0.9.1
 six==1.14.0
 tqdm==4.41.1
-twine==3.1.1
 typed-ast==1.4.1
 typing-extensions==3.7.4.1
 urllib3==1.25.7
