@@ -6,3 +6,8 @@ RequiredKeyIsWrongType = (
     "type of `{invalid_type}`. The value of this key " +
     "should have the type `{expected_type}`"
 )
+
+DirectiveStructureError = (
+    "The following directive `{directive}` has an invalid structure. " +
+    "{problem}. "
+)

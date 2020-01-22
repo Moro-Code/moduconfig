@@ -1,9 +1,17 @@
-from .utils.error_messages import RequiredKeyIsMissing, RequiredKeyIsWrongType
+from .utils.error_messages import (
+    RequiredKeyIsMissing,
+    RequiredKeyIsWrongType,
+    DirectiveStructureError
+)
+
+
+from typing import Optional, Dict
 
 
 class ModuConfig:
-    def __init__(self, config_data: dict):
+    def __init__(self, config_data: dict, mode_data: Optional[Dict[str, str]] = None):
         self.config_data = config_data
+        self.mode_data = mode_data
 
         self.applicationName = config_data.get("applicationName")
         if self.applicationName is None:
@@ -36,6 +44,15 @@ class ModuConfig:
                     expected_type="dict"
                 )
             )
+        # TODO: add check for int keys
+        for mode in self.modes:
+            if not isinstance(self.modes[mode], str):
+                raise ValueError(
+                    DirectiveStructureError.format(
+                        directive="modes",
+                        problem="modes must be of type Dict[str,str]"
+                    ) + f"Offending mode is `{mode}`"
+                )
 
         self.variables = config_data.get("variables")
         if self.variables is None:

@@ -15,3 +15,11 @@ def test_RequiredKeyIsWrongType(error_messages_module):
             "type of `{invalid_type}`. The value of this key " +
             "should have the type `{expected_type}`"
         )
+
+
+def test_DirectiveStructureError(error_messages_module):
+    assert error_messages_module.DirectiveStructureError == \
+        (
+            "The following directive `{directive}` has an invalid structure. " +
+            "{problem}. "
+        )

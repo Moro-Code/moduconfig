@@ -1,3 +1,4 @@
+import random
 import pytest
 from .fixtures.moduconfig import moduconfig_class
 from .fixtures.error_messages import error_messages_module
@@ -69,6 +70,49 @@ def sample_configuration_data_variables_wrong_type(
     data["variables"] = 1
     return data
 
+
+@pytest.fixture
+def sample_configuration_data_modes_not_flat(
+    sample_configuration_data_no_modes
+):
+    import string
+    import random
+    data = sample_configuration_data_no_modes
+    key = "".join(
+        [random.choice(string.ascii_lowercase) for i in range(0, 20)]
+    )
+    data["modes"] = {
+        key: {
+            "not": "flat"
+        },
+        "production": "is flat"
+    }
+
+    return (key, data)
+
+
+@pytest.fixture
+def sample_configuration_data_modes_key_not_int(
+    sample_configuration_data_no_modes
+):
+    import random
+    modes = {}
+    for i in range(40):
+        key = "".join(
+            [random.choice(string.ascii_lowercase) for i in range(0, 20)]
+        )
+        modes[key] = key
+        if random.randint(0, 3) == 0:
+            modes[1] = 0
+
+
+@pytest.fixture
+def mode_data_dict():
+    return {
+        "APPLICATION_VARIABLE": "hello"
+    }
+
+
 #####################################################################################
 
 
@@ -79,6 +123,17 @@ def test_ModuConfig_init(
     valid_sample_configuration_data
 ):
     new_moduconfig = moduconfig_class(valid_sample_configuration_data)
+
+
+def test_ModuConfig_init_sets_modes_data(
+    moduconfig_class,
+    valid_sample_configuration_data,
+    mode_data_dict
+):
+    new_moduconfig = moduconfig_class(
+        valid_sample_configuration_data, mode_data_dict)
+
+    assert new_moduconfig.mode_data == mode_data_dict
 
 
 def test_ModuConfig_init_sets_config_data(
@@ -126,7 +181,7 @@ def test_ModuConfig_init_no_application_name_raises_value_error(
             key_name="applicationName"
         )
     ):
-        new_moduconfig = moduconfig_class(
+        moduconfig_class(
             sample_configuration_data_no_applicationName
         )
 
@@ -142,7 +197,7 @@ def test_ModuConfig_init_no_mode_raises_value_error(
             key_name="modes"
         )
     ):
-        new_moduconfig = moduconfig_class(
+        moduconfig_class(
             sample_configuration_data_no_modes
         )
 
@@ -158,7 +213,7 @@ def test_ModuConfig_init_no_variables_raises_value_error(
             key_name="variables"
         )
     ):
-        new_moduconfig = moduconfig_class(
+        moduconfig_class(
             sample_configuration_data_no_variables
         )
 
@@ -176,7 +231,7 @@ def test_ModuConfig_init_applicationName_wrong_type(
             expected_type="str"
         )
     ):
-        new_moduconfig = moduconfig_class(
+        moduconfig_class(
             sample_configuration_data_applicationName_wrong_type
         )
 
@@ -194,7 +249,7 @@ def test_ModuConfig_init_modes_wrong_type(
             expected_type="dict"
         )
     ):
-        new_moduconfig = moduconfig_class(
+        moduconfig_class(
             sample_configuration_data_modes_wrong_type
         )
 
@@ -212,6 +267,30 @@ def test_ModuConfig_init_variables_wrong_type(
             expected_type="dict"
         )
     ):
-        new_moduconfig = moduconfig_class(
+        moduconfig_class(
             sample_configuration_data_variables_wrong_type
         )
+
+
+def test_ModuConfig_init_modes_key_not_str(
+    moduconfig_class
+):
+    pass
+
+
+def test_ModuConfig_init_modes_not_flat(
+    moduconfig_class,
+    sample_configuration_data_modes_not_flat,
+    error_messages_module
+):
+    key = sample_configuration_data_modes_not_flat[0]
+    data = sample_configuration_data_modes_not_flat[1]
+    with pytest.raises(
+        ValueError,
+    ) as err:
+        moduconfig_class(data)
+
+    assert str(err.value) == error_messages_module.DirectiveStructureError.format(
+        directive="modes",
+        problem="modes must be of type Dict[str,str]"
+    ) + f"Offending mode is `{key}`"
