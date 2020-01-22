@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/Moro-Code/moduconfig.svg?branch=master)](https://travis-ci.com/Moro-Code/moduconfig)
 # moduconfig ⚙️
 
 A declarative and powerful configuration API for application configuration and documentation. 
