@@ -10,6 +10,8 @@ install:
 script:
     - mypy moduconfig
     - pytest --cov=./
+after_success:
+    - codecov
 
 
 
