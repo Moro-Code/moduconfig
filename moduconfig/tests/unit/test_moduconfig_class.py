@@ -293,4 +293,4 @@ def test_ModuConfig_init_modes_not_flat(
     assert str(err.value) == error_messages_module.DirectiveStructureError.format(
         directive="modes",
         problem="modes must be of type Dict[str,str]"
-    ) + f"Offending mode is `{key}`"
+    ) + "Offending mode is `%s`" % key

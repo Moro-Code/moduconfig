@@ -51,7 +51,7 @@ class ModuConfig:
                     DirectiveStructureError.format(
                         directive="modes",
                         problem="modes must be of type Dict[str,str]"
-                    ) + f"Offending mode is `{mode}`"
+                    ) + "Offending mode is `%s`" % mode
                 )
 
         self.variables = config_data.get("variables")
