@@ -5,6 +5,7 @@ from .fixtures.moduconfig import (
     sample_configuration_data_no_modes,
     sample_configuration_data_no_variables,
     sample_configuration_data_applicationName_wrong_type,
+    sample_configuration_data_variables_wrong_type,
     sample_configuration_data_modes_wrong_type,
     sample_configuration_data_modes_not_flat,
     sample_configuration_data_modes_key_is_int,
