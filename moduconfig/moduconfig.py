@@ -10,6 +10,10 @@ from typing import Optional, Dict
 
 class ModuConfig:
     def __init__(self, config_data: dict, mode_data: Optional[Dict[str, str]] = None):
+
+        if config_data is None:
+            raise ValueError("config_data must not be None")
+
         self.config_data = config_data
         self.mode_data = mode_data
 
@@ -44,8 +48,15 @@ class ModuConfig:
                     expected_type="dict"
                 )
             )
-        # TODO: add check for int keys
         for mode in self.modes:
+            if not isinstance(mode, str):
+                raise ValueError(
+                    DirectiveStructureError.format(
+                        directive="modes",
+                        problem="modes must be of type Dict[str,str] " +
+                        "detected key with type %s" % type(mode).__name__
+                    )
+                )
             if not isinstance(self.modes[mode], str):
                 raise ValueError(
                     DirectiveStructureError.format(
